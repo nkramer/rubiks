@@ -53,11 +53,10 @@ def p4(a): # Print the 4D hypercube as a 3x3 grid of 3x3 grids
     ))
     for i in range(c.shape[0]):
         print(' '.join(c[i]) )
-    print('----')
 
 # Rotate the top clockwise
 def rotate_top(cube):
-    b=cube.copy()
+    b = cube.copy()
     b[0,:,:,:] = np.rot90(b[0,:,:,:], axes=[0, 1], k=-1)
     c=b.copy()
     c[0,:,:,1] = b[0,:,:,2]
