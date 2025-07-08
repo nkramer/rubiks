@@ -25,12 +25,21 @@ a[left] = 'O'
 a[right] = 'R' 
 a[front] = 'G' 
 a[back] = 'B'  
+# faces = [top, bottom, left, front, right, back]
+# for (face, color) in zip(faces, "WYORGB"):
+#      a[face] = color
+
 
 # test cube
 letters = [chr(i) for i in range(ord('a'), ord('z') + 1)] + [chr(i) for i in range(ord('A'), ord('Z') + 1)] + [chr(i) for i in range(ord('0'), ord('9') + 1)]
+#letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+
 for i in range(len([top, bottom, left, front, right, back])):
     face = [top, bottom, left, front, right, back][i]
     a[face] = np.array(letters[9*i:9*(i+1)]).reshape([3,3])
+# for i in range(len(faces)):
+#     a[faces[i]] = np.array(letters[9*i:9*(i+1)]).reshape([3,3])
+
 
 def p(a): # Print the cube
     blank = np.zeros(3*3, dtype='str').reshape([3,3]); blank[:,:] = ' '  # blank grid
@@ -71,8 +80,10 @@ def reorient(cube, newTop):
         case 'R': ax=[1,0]; k=3
         case 'F': ax=[2,0]; k=1
         case 'B': ax=[2,0]; k=3
+        #ax = dict(zip("UDLRFB", [1,1,1,1,2,2]))[newTop]
+        #k = dict(zip("UDLRFB", [0,2,1,3,1,3]))[newTop]
     cube = np.rot90(cube, k=k, axes=ax)
-    old = cube.copy()
+    old = cube.copy() # Eliminate
     cube = cube.copy()
     match newTop:  # Reorient the fourth/faces dimension
         case 'L' | 'R': 
@@ -81,6 +92,9 @@ def reorient(cube, newTop):
         case 'F' | 'B': 
             cube[:,:,:,0] = old[:,:,:,2]
             cube[:,:,:,2] = old[:,:,:,0]
+    # cube[:,:,:,0] = old[:,:,:,ax]
+    # cube[:,:,:,ax] = old[:,:,:,0]
+
     return cube
 
 #L = Clockwise, L' = counterclockwise
@@ -92,6 +106,7 @@ def perm(face, cube):
         case 'R': x=('R', 'L')
         case 'F': x=('F', 'B')
         case 'B': x=('B', 'F')
+    #undo = dict(zip("UDLRFB", "UURLBF"))[face]
     b=cube.copy()    
     b = reorient(b, x[0])
     for i in range(1 if len(face) == 1 else 3):
