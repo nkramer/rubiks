@@ -94,5 +94,5 @@ def perm(face, cube):
     b = reorient(b, undo) 
     return b
 
-p(a)
-p(perm("B", a))
+# p(a)
+# p(perm("B", a))

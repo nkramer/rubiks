@@ -48,22 +48,35 @@ st.sidebar.header("Moves")
 # Create 2 columns for moves - each face and its prime on the same row
 col1, col2 = st.sidebar.columns(2)
 
-# Define basic moves
-moves = ["U", "D", "L", "R", "F", "B"]
+with col1:
+    if ss.shortcut_button("U", "u", hint=False, use_container_width=True):
+        st.session_state.cube = perm("U", st.session_state.cube)
+    if ss.shortcut_button("D", "d", hint=False, use_container_width=True):
+        st.session_state.cube = perm("D", st.session_state.cube)
+    if ss.shortcut_button("L", "l", hint=False, use_container_width=True):
+        st.session_state.cube = perm("L", st.session_state.cube)
+    if ss.shortcut_button("R", "r", hint=False, use_container_width=True):
+        st.session_state.cube = perm("R", st.session_state.cube)
+    if ss.shortcut_button("F", "f", hint=False, use_container_width=True):
+        st.session_state.cube = perm("F", st.session_state.cube)
+    if ss.shortcut_button("B", "b", hint=False, use_container_width=True):
+        st.session_state.cube = perm("B", st.session_state.cube)
 
-# Create buttons in a loop
-for move in moves:
-    with col1:
-        #if ss.shortcut_button(move, move.lower(), use_container_width=True):
-        #, move.lower()
-        if st.button(move, use_container_width=True, key=move+'_button'):
-            st.session_state.cube = perm(move, st.session_state.cube)
-        # ss.add_shortcuts(**{move+'_button': move.lower()})
-    
-    with col2:
-        prime_move = move + "'"
-        if st.button(prime_move, use_container_width=True, key=move+'_prime_button'):
-            st.session_state.cube = perm(prime_move, st.session_state.cube)
+with col2:
+    if ss.shortcut_button("U'", "shift+u", hint=False, use_container_width=True):
+        st.session_state.cube = perm("U'", st.session_state.cube)
+    if ss.shortcut_button("D'", "shift+d", hint=False, use_container_width=True):
+        st.session_state.cube = perm("D'", st.session_state.cube)
+    if ss.shortcut_button("L'", "shift+l", hint=False, use_container_width=True):
+        st.session_state.cube = perm("L'", st.session_state.cube)
+    if ss.shortcut_button("R'", "shift+r", hint=False, use_container_width=True):
+        st.session_state.cube = perm("R'", st.session_state.cube)
+    if ss.shortcut_button("F'", "shift+f", hint=False, use_container_width=True):
+        st.session_state.cube = perm("F'", st.session_state.cube)
+    if ss.shortcut_button("B'", "shift+b", hint=False, use_container_width=True):
+        st.session_state.cube = perm("B'", st.session_state.cube)
+
+#st.sidebar.button("foo `bar`")
 
 # Function to create the cube layout like p() function
 def create_cube_layout(cube):
@@ -188,11 +201,3 @@ if st.session_state.move_history:
         st.sidebar.write(f"{i+1}. {move}")
 else:
     st.sidebar.write("No moves made yet")
-
-# Add keyboard shortcuts. To do: call add_shortcuts() only once, with one big argument list.
-# Right now, each shortcut is taking up a little bit of space.
-for move in moves:
-    ss.add_shortcuts(**{move+'_button': move.lower()})
-    ss.add_shortcuts(**{move+'_prime_button': 'shift+' + move.lower()})
-
-st.markdown("""Press **U/D/L/R/F/B** to rotate clockwise, and **shift+U/D/L/R/F/B** for counterclockwise.""")
