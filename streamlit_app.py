@@ -26,6 +26,7 @@ if st.sidebar.button("🔀 Shuffle Cube"):
         random_move = random.choice(all_moves)
         st.session_state.cube = perm(random_move, st.session_state.cube)
 
+c = st.sidebar.container() # Display the reset queue button after the selector
 # Cube type selection
 cube_type = st.sidebar.selectbox(
     "Cube Type",
@@ -33,11 +34,11 @@ cube_type = st.sidebar.selectbox(
     index=0
 )
 
-if cube_type == "Standard Cube (Colors)":
-    if st.sidebar.button("Reset cube"):
+# Reset button
+if c.button("Reset cube"):
+    if cube_type == "Standard Cube (Colors)":
         st.session_state.cube = new_cube()
-else:
-    if st.sidebar.button("Reset cube"):
+    else:
         st.session_state.cube = new_test_cube()
 
 # Move controls
