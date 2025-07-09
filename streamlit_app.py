@@ -43,45 +43,36 @@ if c.button("Reset cube"):
 
 # Move controls
 st.sidebar.header("Moves")
-moves = ['U', 'D', 'L', 'R', 'F', 'B', "U'", "D'", "L'", "R'", "F'", "B'"]
 
-# Create 3 columns for moves
-col1, col2, col3 = st.sidebar.columns(3)
+# Create 2 columns for moves - each face and its prime on the same row
+col1, col2 = st.sidebar.columns(2)
 
 with col1:
-    if st.button("U"):
+    if st.button("U", use_container_width=True):
         st.session_state.cube = perm("U", st.session_state.cube)
-    if st.button("D"):
+    if st.button("D", use_container_width=True):
         st.session_state.cube = perm("D", st.session_state.cube)
-    if st.button("L"):
+    if st.button("L", use_container_width=True):
         st.session_state.cube = perm("L", st.session_state.cube)
-
-with col2:
-    if st.button("R"):
+    if st.button("R", use_container_width=True):
         st.session_state.cube = perm("R", st.session_state.cube)
-    if st.button("F"):
+    if st.button("F", use_container_width=True):
         st.session_state.cube = perm("F", st.session_state.cube)
-    if st.button("B"):
+    if st.button("B", use_container_width=True):
         st.session_state.cube = perm("B", st.session_state.cube)
 
-with col3:
-    if st.button("U'"):
+with col2:
+    if st.button("U'", use_container_width=True):
         st.session_state.cube = perm("U'", st.session_state.cube)
-    if st.button("D'"):
+    if st.button("D'", use_container_width=True):
         st.session_state.cube = perm("D'", st.session_state.cube)
-    if st.button("L'"):
+    if st.button("L'", use_container_width=True):
         st.session_state.cube = perm("L'", st.session_state.cube)
-
-# Additional moves
-col4, col5, col6 = st.sidebar.columns(3)
-with col4:
-    if st.button("R'"):
+    if st.button("R'", use_container_width=True):
         st.session_state.cube = perm("R'", st.session_state.cube)
-with col5:
-    if st.button("F'"):
+    if st.button("F'", use_container_width=True):
         st.session_state.cube = perm("F'", st.session_state.cube)
-with col6:
-    if st.button("B'"):
+    if st.button("B'", use_container_width=True):
         st.session_state.cube = perm("B'", st.session_state.cube)
 
 # Function to create the cube layout like p() function
