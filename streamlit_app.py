@@ -1,5 +1,6 @@
 import streamlit as st
 import numpy as np
+import random
 from cube import new_cube, new_test_cube, perm, faces, top, bottom, left, right, front, back
 
 # Page configuration
@@ -16,8 +17,14 @@ st.title("🧊 Rubik's Cube Visualizer")
 if 'cube' not in st.session_state:
     st.session_state.cube = new_cube()
 
-# Sidebar controls
-st.sidebar.header("Controls")
+if st.sidebar.button("🔀 Shuffle Cube"):
+    # Define all possible moves
+    all_moves = ['U', 'D', 'L', 'R', 'F', 'B', "U'", "D'", "L'", "R'", "F'", "B'"]
+    
+    # Apply 20 random moves
+    for _ in range(20):
+        random_move = random.choice(all_moves)
+        st.session_state.cube = perm(random_move, st.session_state.cube)
 
 # Cube type selection
 cube_type = st.sidebar.selectbox(
@@ -27,10 +34,10 @@ cube_type = st.sidebar.selectbox(
 )
 
 if cube_type == "Standard Cube (Colors)":
-    if st.sidebar.button("Reset to Standard Cube"):
+    if st.sidebar.button("Reset cube"):
         st.session_state.cube = new_cube()
 else:
-    if st.sidebar.button("Reset to Test Cube"):
+    if st.sidebar.button("Reset cube"):
         st.session_state.cube = new_test_cube()
 
 # Move controls
