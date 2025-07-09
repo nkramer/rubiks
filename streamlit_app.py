@@ -158,7 +158,9 @@ def create_html_cube_display(data, use_colors=True):
                 # Regular cell
                 if use_colors:
                     bg_color = get_cell_color(cell)
-                    html_parts.append(f'<div class="cube-cell" style="background-color: {bg_color}; color: black;">{cell}</div>')
+                    # Use white text for blue and red backgrounds, black for others
+                    text_color = 'white' if cell in ['B', 'R'] else 'black'
+                    html_parts.append(f'<div class="cube-cell" style="background-color: {bg_color}; color: {text_color};">{cell}</div>')
                 else:
                     html_parts.append(f'<div class="cube-cell" style="background-color: #f0f0f0; color: black;">{cell}</div>')
     
