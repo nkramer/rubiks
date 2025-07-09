@@ -111,21 +111,60 @@ def get_cell_color(value):
     }
     return color_map.get(value, '#FFFFFF')  # Default to white
 
-# Function to create styled dataframe with colors
-def create_colored_dataframe(data):
-    """Create a dataframe with colored backgrounds"""
-    import pandas as pd
+# Function to create HTML grid display
+def create_html_cube_display(data, use_colors=True):
+    """Create HTML grid display for the cube"""
+    html_parts = []
     
-    # Convert numpy array to pandas DataFrame
-    df = pd.DataFrame(data)
+    # CSS styles
+    css = """
+    <style>
+    .cube-grid {
+        display: grid;
+        grid-template-columns: repeat(15, 20px);
+        grid-template-rows: repeat(11, 20px);
+        gap: 1px;
+        font-family: monospace;
+        font-size: 12px;
+        font-weight: bold;
+        text-align: center;
+        line-height: 20px;
+        width: fit-content;
+        margin: 0 auto;
+    }
+    .cube-cell {
+        width: 20px;
+        height: 20px;
+        border: 1px solid #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .blank-cell {
+        background-color: transparent;
+        border: none;
+    }
+    </style>
+    """
     
-    # Apply styling with background colors and compact sizing
-    def style_cell(val):
-        color = get_cell_color(val)
-        return f'background-color: {color}; color: black; text-align: center; font-weight: bold; padding: 2px; font-size: 12px;'
+    html_parts.append(css)
+    html_parts.append('<div class="cube-grid">')
     
-    styled_df = df.style.applymap(style_cell)
-    return styled_df
+    for i, row in enumerate(data):
+        for j, cell in enumerate(row):
+            if cell == ' ':
+                # Blank space
+                html_parts.append(f'<div class="cube-cell blank-cell"></div>')
+            else:
+                # Regular cell
+                if use_colors:
+                    bg_color = get_cell_color(cell)
+                    html_parts.append(f'<div class="cube-cell" style="background-color: {bg_color}; color: black;">{cell}</div>')
+                else:
+                    html_parts.append(f'<div class="cube-cell" style="background-color: #f0f0f0; color: black;">{cell}</div>')
+    
+    html_parts.append('</div>')
+    return ''.join(html_parts)
 
 # Main display area
 st.header("Cube Display")
@@ -133,27 +172,15 @@ st.header("Cube Display")
 # Create the cube layout
 cube_layout = create_cube_layout(st.session_state.cube)
 
-# Display the cube layout with colors
+# Display the cube layout with HTML grid
 if cube_type == "Standard Cube (Colors)":
     # Use colored display for standard cube
-    styled_layout = create_colored_dataframe(cube_layout)
-    st.dataframe(
-        styled_layout,
-        hide_index=True,
-        use_container_width=False,
-        width=400  # Much narrower to fit all faces
-    )
+    html_display = create_html_cube_display(cube_layout, use_colors=True)
 else:
     # Use regular display for test cube
-    st.dataframe(
-        cube_layout,
-        hide_index=True,
-        column_config={
-            str(i): st.column_config.TextColumn("", width="tiny") for i in range(cube_layout.shape[1])
-        },
-        use_container_width=False,
-        width=400  # Much narrower to fit all faces
-    )
+    html_display = create_html_cube_display(cube_layout, use_colors=False)
+
+st.markdown(html_display, unsafe_allow_html=True)
 
 # Add face labels for reference
 st.markdown("""
