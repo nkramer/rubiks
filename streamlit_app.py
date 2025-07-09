@@ -79,7 +79,6 @@ with col6:
 # Function to create the cube layout like p() function
 def create_cube_layout(cube):
     """Create the cube layout similar to the p() function"""
-    import numpy as np
     
     # Create blank grids and strips like in p() function
     blank = np.zeros(3*3, dtype='str').reshape([3,3])
@@ -121,20 +120,20 @@ def create_html_cube_display(data, use_colors=True):
     <style>
     .cube-grid {
         display: grid;
-        grid-template-columns: repeat(15, 20px);
-        grid-template-rows: repeat(11, 20px);
+        grid-template-columns: repeat(15, 30px);
+        grid-template-rows: repeat(11, 30px);
         gap: 1px;
         font-family: monospace;
-        font-size: 12px;
+        font-size: 15px;
         font-weight: bold;
         text-align: center;
-        line-height: 20px;
+        line-height: 30px;
         width: fit-content;
         margin: 0 auto;
     }
     .cube-cell {
-        width: 20px;
-        height: 20px;
+        width: 30px;
+        height: 30px;
         border: 1px solid #ccc;
         display: flex;
         align-items: center;
@@ -166,9 +165,6 @@ def create_html_cube_display(data, use_colors=True):
     html_parts.append('</div>')
     return ''.join(html_parts)
 
-# Main display area
-st.header("Cube Display")
-
 # Create the cube layout
 cube_layout = create_cube_layout(st.session_state.cube)
 
@@ -181,27 +177,6 @@ else:
     html_display = create_html_cube_display(cube_layout, use_colors=False)
 
 st.markdown(html_display, unsafe_allow_html=True)
-
-# Add face labels for reference
-st.markdown("""
-**Face Layout:**
-- Top face is in the center-top
-- Left face is on the left (flipped horizontally)
-- Front face is in the center
-- Right face is on the right
-- Back face is on the far right (flipped horizontally)
-- Bottom face is in the center-bottom
-""")
-
-# Additional information
-st.sidebar.header("Information")
-st.sidebar.write(f"**Cube Shape:** {st.session_state.cube.shape}")
-st.sidebar.write(f"**Data Type:** {st.session_state.cube.dtype}")
-
-# Flattened cube string
-st.sidebar.header("Flattened Cube")
-flattened = ''.join(st.session_state.cube.flatten())
-st.sidebar.text_area("Flattened Cube String", flattened, height=100)
 
 # Move history (optional feature)
 if 'move_history' not in st.session_state:
@@ -216,7 +191,3 @@ if st.session_state.move_history:
         st.sidebar.write(f"{i+1}. {move}")
 else:
     st.sidebar.write("No moves made yet")
-
-# Footer
-st.markdown("---")
-st.markdown("**Rubik's Cube Visualizer** - Built with Streamlit and NumPy") 
