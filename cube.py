@@ -27,10 +27,10 @@ def new_cube():
 
 def new_test_cube():
     a = new_cube()
-    letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    letters = list('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
     faces = [top, bottom, left, front, right, back]  # Faces are in a different order from the global "faces" variable
     for i in range(len(faces)):
-        a[faces[i]] = np.array(list(letters[9*i:9*(i+1)])).reshape([3,3])
+        a[faces[i]] = np.array(letters[9*i:9*(i+1)]).reshape([3,3])
     return a
 
 a = new_cube()
