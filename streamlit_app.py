@@ -33,28 +33,21 @@ for move in moves:
 
 # Function to create the cube layout like p() function
 def create_cube_layout(cube):
-    """Create the cube layout similar to the p() function"""
-    
-    # Create blank grids and strips like in p() function
     blank = np.zeros(3*3, dtype='str').reshape([3,3])
     blank[:,:] = ' '
     strip = np.zeros(3*1, dtype='str').reshape([3,1])
     strip[:,:] = ' '
     
-    # Create blank rows for spacing
     blank_row = np.zeros(15, dtype='str')
     blank_row[:] = ' '
     
-    # Build the layout with blank rows for spacing
-    c = np.concatenate((
+    return np.concatenate((
         np.concatenate((blank, strip, np.flip(np.transpose(cube[top]), axis=0), strip, blank, strip, blank), axis=1),
         [blank_row],  # Blank row after top face
         np.concatenate((np.flip(cube[left], axis=1), strip, cube[front], strip, cube[right], strip, np.flip(cube[back], axis=1)), axis=1),
         [blank_row],  # Blank row before bottom face
         np.concatenate((blank, strip, np.transpose(cube[bottom]), strip, blank, strip, blank), axis=1)
-    ))
-    
-    return c
+    ))    
 
 def get_cell_color(value):
     color_map = {
@@ -75,14 +68,13 @@ def create_html_cube_display(data, use_colors=True):
     <style>
     .cube-grid {
         display: grid;
-        grid-template-columns: repeat(15, 30px);
-        grid-template-rows: repeat(11, 30px);
+        grid-template-columns: repeat(15, auto);
+        grid-template-rows: repeat(11, auto);
         gap: 1px;
         font-family: monospace;
         font-size: 15px;
         font-weight: bold;
         text-align: center;
-        line-height: 30px;
         width: fit-content;
         margin: 0 auto;
     }
@@ -95,6 +87,8 @@ def create_html_cube_display(data, use_colors=True):
         justify-content: center;
     }
     .blank-cell {
+        width: 15px;
+        height: 15px;
         background-color: transparent;
         border: none;
     }
@@ -105,10 +99,8 @@ def create_html_cube_display(data, use_colors=True):
     for i, row in enumerate(data):
         for j, cell in enumerate(row):
             if cell == ' ':
-                # Blank space
-                html_parts.append(f'<div class="cube-cell blank-cell"></div>')
+                html_parts.append(f'<div class="blank-cell"> </div>')
             else:
-                # Regular cell
                 if use_colors:
                     bg_color = get_cell_color(cell)
                     # Use white text for blue and red backgrounds, black for others
