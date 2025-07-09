@@ -28,11 +28,9 @@ def new_cube():
 def new_test_cube():
     a = new_cube()
     letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-    for i in range(len([top, bottom, left, front, right, back])):
-        face = [top, bottom, left, front, right, back][i]
-        a[face] = np.array(list(letters[9*i:9*(i+1)])).reshape([3,3])
-    # for i in range(len(faces)):
-    #     a[faces[i]] = np.array(letters[9*i:9*(i+1)]).reshape([3,3])
+    faces = [top, bottom, left, front, right, back]  # Faces are in a different order from the global "faces" variable
+    for i in range(len(faces)):
+        a[faces[i]] = np.array(list(letters[9*i:9*(i+1)])).reshape([3,3])
     return a
 
 a = new_cube()
@@ -79,9 +77,8 @@ def rotate_top(cube):
 def reorient(cube, newTop):
     ax = dict(zip("UDLRFB", [1,1,1,1,2,2]))[newTop]
     k = dict(zip("UDLRFB", [0,2,1,3,1,3]))[newTop]
-    cube = np.rot90(cube, k=k, axes=[ax, 0])
-    old = cube.copy() # Eliminate
-    cube = cube.copy()
+    cube = np.rot90(cube, k=k, axes=[ax, 0])  # Creates a copy
+    old = cube.copy()
     match newTop:  # Reorient the fourth/faces dimension
         case 'L' | 'R' | 'F' | 'B': 
             cube[:,:,:,0] = old[:,:,:,ax]
@@ -91,8 +88,7 @@ def reorient(cube, newTop):
 #L = Clockwise, L' = counterclockwise
 def perm(face, cube):
     undo = dict(zip("UDLRFB", "UDRLBF"))[face[0]]
-    b=cube.copy()    
-    b = reorient(b, face[0])
+    b = reorient(cube, face[0])
     for i in range(1 if len(face) == 1 else 3):
         b = rotate_top(b)
     b = reorient(b, undo) 
