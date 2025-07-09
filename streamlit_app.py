@@ -85,10 +85,16 @@ def create_cube_layout(cube):
     strip = np.zeros(3*1, dtype='str').reshape([3,1])
     strip[:,:] = ' '
     
-    # Build the layout exactly like p() function
+    # Create blank rows for spacing
+    blank_row = np.zeros(15, dtype='str')
+    blank_row[:] = ' '
+    
+    # Build the layout with blank rows for spacing
     c = np.concatenate((
         np.concatenate((blank, strip, np.flip(np.transpose(cube[top]), axis=0), strip, blank, strip, blank), axis=1),
+        [blank_row],  # Blank row after top face
         np.concatenate((np.flip(cube[left], axis=1), strip, cube[front], strip, cube[right], strip, np.flip(cube[back], axis=1)), axis=1),
+        [blank_row],  # Blank row before bottom face
         np.concatenate((blank, strip, np.transpose(cube[bottom]), strip, blank, strip, blank), axis=1)
     ))
     
