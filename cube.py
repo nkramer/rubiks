@@ -31,8 +31,6 @@ def new_cube():
     #      a[face] = color
     return a
 
-a = new_cube()
-
 def new_test_cube():
     a = new_cube()
     letters = [chr(i) for i in range(ord('a'), ord('z') + 1)] + [chr(i) for i in range(ord('A'), ord('Z') + 1)] + [chr(i) for i in range(ord('0'), ord('9') + 1)]
@@ -45,7 +43,11 @@ def new_test_cube():
     #     a[faces[i]] = np.array(letters[9*i:9*(i+1)]).reshape([3,3])
     return a
 
+a = new_cube()
 a = new_test_cube()
+
+def flatten_cube(a):
+    return ''.join(a.flatten()) # flatten the cube to a single string
 
 def cube_to_string(a): # Convert cube to string representation
     blank = np.zeros(3*3, dtype='str').reshape([3,3]); blank[:,:] = ' '  # blank grid
