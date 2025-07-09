@@ -1,5 +1,5 @@
 import numpy as np
-# import random
+import random
 
 # shuffle
 # #x = ["L", "L'", "R", "R'"]
@@ -96,3 +96,10 @@ def perm(face, cube):
 
 # p(a)
 # p(perm("B", a))
+
+def mix(cube):
+    all_moves = ['U', 'D', 'L', 'R', 'F', 'B', "U'", "D'", "L'", "R'", "F'", "B'"]
+    for _ in range(20):
+        random_move = random.choice(all_moves)
+        cube = perm(random_move, cube)
+    return cube

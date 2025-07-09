@@ -1,6 +1,7 @@
 import streamlit as st
 import numpy as np
-from cube import new_cube, new_test_cube, perm, faces, top, bottom, left, right, front, back, mix
+import random
+from cube import new_cube, new_test_cube, perm, faces, top, bottom, left, right, front, back
 import streamlit_shortcuts as ss
 
 st.set_page_config(page_title="Rubik's Cube Visualizer", page_icon="🧊", layout="wide")
@@ -10,15 +11,20 @@ if 'cube' not in st.session_state:
     st.session_state.cube = new_cube()
 
 if st.sidebar.button("🔀 Shuffle Cube"):
-    st.session_state.cube = mix(st.session_state.cube)
+    all_moves = ['U', 'D', 'L', 'R', 'F', 'B', "U'", "D'", "L'", "R'", "F'", "B'"]
+    for _ in range(20):
+        random_move = random.choice(all_moves)
+        st.session_state.cube = perm(random_move, st.session_state.cube)
 
 c = st.sidebar.container() # Display the reset queue button after the selector
 cube_type = st.sidebar.selectbox("Cube Type",
     ["Standard Cube", "Test Cube"], index=0)
-def is_colored(): return cube_type == "Standard Cube"
 
 if c.button("Reset cube"):
-    st.session_state.cube = new_cube() if is_colored() else new_test_cube()
+    if cube_type == "Standard Cube (Colors)":
+        st.session_state.cube = new_cube()
+    else:
+        st.session_state.cube = new_test_cube()
 
 st.sidebar.header("Moves")
 col1, col2 = st.sidebar.columns(2)
@@ -101,7 +107,10 @@ def create_html_cube_display(data, use_colors=True):
     </style>
     """
     
-    html_parts = [css, '<div class="cube-grid">']
+    html_parts = []
+    html_parts.append(css)
+    html_parts.append('<div class="cube-grid">')
+    
     for i, row in enumerate(data):
         for j, cell in enumerate(row):
             if cell == ' ':
@@ -121,8 +130,28 @@ def create_html_cube_display(data, use_colors=True):
     return ''.join(html_parts)
 
 cube_layout = create_cube_layout(st.session_state.cube)
-html_display = create_html_cube_display(cube_layout, use_colors=is_colored())
+
+if cube_type == "Standard Cube (Colors)":
+    html_display = create_html_cube_display(cube_layout, use_colors=True)
+else:
+    html_display = create_html_cube_display(cube_layout, use_colors=False)
+
 st.markdown(html_display, unsafe_allow_html=True)
+
+# Move history (optional feature)
+if 'move_history' not in st.session_state:
+    st.session_state.move_history = []
+
+# Add move to history when a move is made
+# (This would need to be implemented with callbacks or state management)
+
+st.sidebar.header("Move History")
+if st.session_state.move_history:
+    for i, move in enumerate(st.session_state.move_history):
+        st.sidebar.write(f"{i+1}. {move}")
+else:
+    st.sidebar.write("No moves made yet")
+
 
 # Add keyboard shortcuts. To do: call add_shortcuts() only once, with one big argument list.
 # Right now, each shortcut is taking up a little bit of space.
