@@ -70,11 +70,8 @@ def create_html_cube_display(data, use_colors=True):
         display: grid;
         grid-template-columns: repeat(15, auto);
         grid-template-rows: repeat(11, auto);
-        gap: 1px;
         font-family: monospace;
         font-size: 15px;
-        font-weight: bold;
-        text-align: center;
         width: fit-content;
         margin: 0 auto;
     }
@@ -89,8 +86,6 @@ def create_html_cube_display(data, use_colors=True):
     .blank-cell {
         width: 15px;
         height: 15px;
-        background-color: transparent;
-        border: none;
     }
     </style>
     """
