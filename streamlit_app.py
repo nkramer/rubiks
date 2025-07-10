@@ -43,7 +43,6 @@ def get_cell_color(value):
     }
     return color_map.get(value, '#FFFFFF')  # Default to white
 
-# Function to create HTML grid display
 def cube_to_html(data):  
     css = """<style>
                 .cube-grid {
@@ -68,20 +67,18 @@ def cube_to_html(data):
                     height: 15px;
                 }
             </style>"""
-    
-    html_parts = [css, '<div class="cube-grid">']
-    for row in data:
-        for cell in row:
-            if cell == ' ':
-                html_parts.append(f'<div class="blank-cell"> </div>')
-            else:
-                # Use white text for blue and red backgrounds, black for others
-                text_color = 'white' if is_colored() and cell in ['B', 'R'] else 'black'
-                style = f'style="background-color: {get_cell_color(cell)}; color: {text_color};"'
-                html_parts.append(f'<div class="cube-cell" {style}>{cell}</div>')
-    
-    html_parts.append('</div>')
-    return ''.join(html_parts)
+
+    def cell_to_html(cell):
+        if cell == ' ':
+            return f'<div class="blank-cell"> </div>'
+        else:
+            # Use white text for blue and red backgrounds, black for others
+            text_color = 'white' if is_colored() and cell in ['B', 'R'] else 'black'
+            style = f'style="background-color: {get_cell_color(cell)}; color: {text_color};"'
+            return f'<div class="cube-cell" {style}>{cell}</div>'
+
+    HTML_cells = [cell_to_html(cell) for row in data for cell in row]
+    return f'{css} <div class="cube-grid"> {"".join(HTML_cells)}</div>'
 
 cube_layout = cube_to_string(st.session_state.cube).split("\n")
 cube_layout = [row[::2] for row in cube_layout] # Remove whitespace between squares
