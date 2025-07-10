@@ -39,52 +39,47 @@ def get_cell_color(value):
         'R': '#FF0000',  # Red
         'G': '#00FF00',  # Green
         'B': '#0000FF',  # Blue
-        ' ': '#F0F0F0',  # Light gray for blank spaces
-        '-': '#E0E0E0'   # Slightly darker gray for dashes
     }
     return color_map.get(value, '#FFFFFF')  # Default to white
 
 # Function to create HTML grid display
-def create_html_cube_display(data, use_colors=True):  
-    css = """
-    <style>
-    .cube-grid {
-        display: grid;
-        grid-template-columns: repeat(15, auto);
-        grid-template-rows: repeat(11, auto);
-        font-family: monospace;
-        font-size: 15px;
-        width: fit-content;
-        margin: 0 auto;
-    }
-    .cube-cell {
-        width: 30px;
-        height: 30px;
-        border: 1px solid #ccc;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .blank-cell {
-        width: 15px;
-        height: 15px;
-    }
-    </style>
-    """
+def create_html_cube_display(data):  
+    css = """<style>
+                .cube-grid {
+                    display: grid;
+                    grid-template-columns: repeat(15, auto);
+                    grid-template-rows: repeat(11, auto);
+                    font-family: monospace;
+                    font-size: 15px;
+                    width: fit-content;
+                    margin: 0 auto;
+                }
+                .cube-cell {
+                    width: 30px;
+                    height: 30px;
+                    border: 1px solid #ccc;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .blank-cell {
+                    width: 15px;
+                    height: 15px;
+                }
+            </style>"""
     
     html_parts = [css, '<div class="cube-grid">']
     for i, row in enumerate(data):
         for j, cell in enumerate(row):
             if cell == ' ':
                 html_parts.append(f'<div class="blank-cell"> </div>')
+            elif is_colored():
+                bg_color = get_cell_color(cell)
+                # Use white text for blue and red backgrounds, black for others
+                text_color = 'white' if cell in ['B', 'R'] else 'black'
+                html_parts.append(f'<div class="cube-cell" style="background-color: {bg_color}; color: {text_color};">{cell}</div>')
             else:
-                if use_colors:
-                    bg_color = get_cell_color(cell)
-                    # Use white text for blue and red backgrounds, black for others
-                    text_color = 'white' if cell in ['B', 'R'] else 'black'
-                    html_parts.append(f'<div class="cube-cell" style="background-color: {bg_color}; color: {text_color};">{cell}</div>')
-                else:
-                    html_parts.append(f'<div class="cube-cell" style="background-color: #f0f0f0; color: black;">{cell}</div>')
+                html_parts.append(f'<div class="cube-cell" style="background-color: #f0f0f0; color: black;">{cell}</div>')
     
     html_parts.append('</div>')
     return ''.join(html_parts)
@@ -93,7 +88,7 @@ cube_layout = cube_to_string(st.session_state.cube).split("\n")
 cube_layout = [row[::2] for row in cube_layout] # Remove whitespace between squares
 cube_layout.insert(3, " " * 15)
 cube_layout.insert(7, " " * 15)
-html_display = create_html_cube_display(cube_layout, use_colors=is_colored())
+html_display = create_html_cube_display(cube_layout)
 st.markdown(html_display, unsafe_allow_html=True)
 
 # Add keyboard shortcuts. To do: call add_shortcuts() only once, with one big argument list.
