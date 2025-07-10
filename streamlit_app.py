@@ -36,10 +36,10 @@ def get_cell_color(value):
     color_map = {
         'W': '#FFFFFF',  # White
         'Y': '#FFFF00',  # Yellow
-        'O': '#FFA500',  # Orange
+        'O': '#ff8819',  # Orange
         'R': '#FF0000',  # Red
-        'G': '#00FF00',  # Green
-        'B': '#0000FF',  # Blue
+        'G': '#24c932',  # Green
+        'B': '#055af7',  # Blue
     }
     return color_map.get(value, '#FFFFFF')  # Default to white
 
@@ -57,7 +57,7 @@ def cube_to_html(data):
                 .cube-cell {
                     width: 30px;
                     height: 30px;
-                    border: 1px solid #ccc;
+                    border: 1px solid #000000;
                     display: flex;
                     align-items: center;
                     justify-content: center;
