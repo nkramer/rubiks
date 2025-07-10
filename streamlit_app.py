@@ -1,6 +1,6 @@
 import streamlit as st
 import numpy as np
-from cube import new_cube, new_test_cube, perm, faces, top, bottom, left, right, front, back, mix
+from cube import new_cube, new_test_cube, perm, faces, top, bottom, left, right, front, back, mix, cube_to_string
 import streamlit_shortcuts as ss
 
 st.set_page_config(page_title="Rubik's Cube Visualizer", page_icon="🧊", layout="wide")
@@ -30,24 +30,6 @@ for move in moves:
     with col2:
         if st.button(move+"'", use_container_width=True, key=move+'_prime_button'):
             st.session_state.cube = perm(move+"'", st.session_state.cube)
-
-# Function to create the cube layout like p() function
-def create_cube_layout(cube):
-    blank = np.zeros(3*3, dtype='str').reshape([3,3])
-    blank[:,:] = ' '
-    strip = np.zeros(3*1, dtype='str').reshape([3,1])
-    strip[:,:] = ' '
-    
-    blank_row = np.zeros(15, dtype='str')
-    blank_row[:] = ' '
-    
-    return np.concatenate((
-        np.concatenate((blank, strip, np.flip(np.transpose(cube[top]), axis=0), strip, blank, strip, blank), axis=1),
-        [blank_row],  # Blank row after top face
-        np.concatenate((np.flip(cube[left], axis=1), strip, cube[front], strip, cube[right], strip, np.flip(cube[back], axis=1)), axis=1),
-        [blank_row],  # Blank row before bottom face
-        np.concatenate((blank, strip, np.transpose(cube[bottom]), strip, blank, strip, blank), axis=1)
-    ))    
 
 def get_cell_color(value):
     color_map = {
@@ -107,7 +89,10 @@ def create_html_cube_display(data, use_colors=True):
     html_parts.append('</div>')
     return ''.join(html_parts)
 
-cube_layout = create_cube_layout(st.session_state.cube)
+cube_layout = cube_to_string(st.session_state.cube).split("\n")
+cube_layout = [row[::2] for row in cube_layout] # Remove whitespace between squares
+cube_layout.insert(3, " " * 15)
+cube_layout.insert(7, " " * 15)
 html_display = create_html_cube_display(cube_layout, use_colors=is_colored())
 st.markdown(html_display, unsafe_allow_html=True)
 
