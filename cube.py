@@ -1,15 +1,6 @@
 import numpy as np
 import random
 
-# shuffle
-# #x = ["L", "L'", "R", "R'"]
-# x = "L L' R R'".split(" ")
-# path = [random.choice(x) for i in range(20)]
-# print( " ".join(path) )
-
-# axes = (up/down, left/right, back/front, faces)
-# faces = the colors of (up/down, left/right, back/front)
-
 top    = 0, slice(0,3), slice(0,3), 0 # == cube[0,:,:,0]
 bottom = 2, slice(0,3), slice(0,3), 0 
 left   = slice(0,3), 0, slice(0,3), 1
@@ -94,12 +85,8 @@ def perm(face, cube):
     b = reorient(b, undo) 
     return b
 
-# p(a)
-# p(perm("B", a))
-
 def mix(cube):
-    all_moves = ['U', 'D', 'L', 'R', 'F', 'B', "U'", "D'", "L'", "R'", "F'", "B'"]
+    all_moves = "U D L R F B U' D' L' R' F' B'".split(" ")
     for _ in range(20):
-        random_move = random.choice(all_moves)
-        cube = perm(random_move, cube)
+        cube = perm(random.choice(all_moves), cube)
     return cube
