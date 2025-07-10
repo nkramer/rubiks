@@ -32,6 +32,7 @@ for move in moves:
             st.session_state.cube = perm(move+"'", st.session_state.cube)
 
 def get_cell_color(value):
+    if not is_colored(): return '#FFFFFF' # White
     color_map = {
         'W': '#FFFFFF',  # White
         'Y': '#FFFF00',  # Yellow
@@ -73,13 +74,11 @@ def create_html_cube_display(data):
         for j, cell in enumerate(row):
             if cell == ' ':
                 html_parts.append(f'<div class="blank-cell"> </div>')
-            elif is_colored():
-                bg_color = get_cell_color(cell)
-                # Use white text for blue and red backgrounds, black for others
-                text_color = 'white' if cell in ['B', 'R'] else 'black'
-                html_parts.append(f'<div class="cube-cell" style="background-color: {bg_color}; color: {text_color};">{cell}</div>')
             else:
-                html_parts.append(f'<div class="cube-cell" style="background-color: #f0f0f0; color: black;">{cell}</div>')
+                # Use white text for blue and red backgrounds, black for others
+                text_color = 'white' if is_colored() and cell in ['B', 'R'] else 'black'
+                style = f'style="background-color: {get_cell_color(cell)}; color: {text_color};"'
+                html_parts.append(f'<div class="cube-cell" {style}>{cell}</div>')
     
     html_parts.append('</div>')
     return ''.join(html_parts)
