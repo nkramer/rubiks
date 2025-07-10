@@ -44,7 +44,7 @@ def get_cell_color(value):
     return color_map.get(value, '#FFFFFF')  # Default to white
 
 # Function to create HTML grid display
-def create_html_cube_display(data):  
+def cube_to_html(data):  
     css = """<style>
                 .cube-grid {
                     display: grid;
@@ -70,8 +70,8 @@ def create_html_cube_display(data):
             </style>"""
     
     html_parts = [css, '<div class="cube-grid">']
-    for i, row in enumerate(data):
-        for j, cell in enumerate(row):
+    for row in data:
+        for cell in row:
             if cell == ' ':
                 html_parts.append(f'<div class="blank-cell"> </div>')
             else:
@@ -85,10 +85,9 @@ def create_html_cube_display(data):
 
 cube_layout = cube_to_string(st.session_state.cube).split("\n")
 cube_layout = [row[::2] for row in cube_layout] # Remove whitespace between squares
-cube_layout.insert(3, " " * 15)
+cube_layout.insert(3, " " * 15) # insert a blank row between cube faces
 cube_layout.insert(7, " " * 15)
-html_display = create_html_cube_display(cube_layout)
-st.markdown(html_display, unsafe_allow_html=True)
+st.markdown(cube_to_html(cube_layout), unsafe_allow_html=True)
 
 # Add keyboard shortcuts. To do: call add_shortcuts() only once, with one big argument list.
 # Right now, each shortcut is taking up a little bit of space.
