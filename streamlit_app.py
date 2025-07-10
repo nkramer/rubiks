@@ -1,6 +1,6 @@
 import streamlit as st
 import numpy as np
-from cube import new_cube, new_test_cube, perm, faces, top, bottom, left, right, front, back, mix, cube_to_string
+from cube import new_cube, new_test_cube, do_move, faces, top, bottom, left, right, front, back, mix, cube_to_string
 import streamlit_shortcuts as ss
 
 st.set_page_config(page_title="Rubik's Cube Visualizer", page_icon="🧊", layout="wide")
@@ -9,7 +9,7 @@ st.title("🧊 Rubik's Cube Visualizer")
 if 'cube' not in st.session_state:
     st.session_state.cube = new_cube()
 
-if st.sidebar.button("🔀 Shuffle Cube"):
+if st.sidebar.button("🔀 Mix Cube"):
     st.session_state.cube = mix(st.session_state.cube)
 
 c = st.sidebar.container() # Display the reset queue button after the selector
@@ -26,10 +26,10 @@ moves = ["U", "D", "L", "R", "F", "B"]
 for move in moves:
     with col1:
         if st.button(move, use_container_width=True, key=move+'_button'):
-            st.session_state.cube = perm(move, st.session_state.cube)  
+            st.session_state.cube = do_move(move, st.session_state.cube)  
     with col2:
         if st.button(move+"'", use_container_width=True, key=move+'_prime_button'):
-            st.session_state.cube = perm(move+"'", st.session_state.cube)
+            st.session_state.cube = do_move(move+"'", st.session_state.cube)
 
 def get_cell_color(value):
     if not is_colored(): return '#FFFFFF' # White

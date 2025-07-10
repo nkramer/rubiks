@@ -77,7 +77,7 @@ def reorient(cube, newTop):
     return cube
 
 #L = Clockwise, L' = counterclockwise
-def perm(face, cube):
+def do_move(face, cube):
     undo = dict(zip("UDLRFB", "UDRLBF"))[face[0]]
     b = reorient(cube, face[0])
     for i in range(1 if len(face) == 1 else 3):
@@ -88,5 +88,5 @@ def perm(face, cube):
 def mix(cube):
     all_moves = "U D L R F B U' D' L' R' F' B'".split(" ")
     for _ in range(20):
-        cube = perm(random.choice(all_moves), cube)
+        cube = do_move(random.choice(all_moves), cube)
     return cube
