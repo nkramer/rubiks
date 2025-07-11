@@ -93,3 +93,4 @@ for move in moves:
     ss.add_shortcuts(**{move+'_prime_button': 'shift+' + move.lower()})
 
 st.markdown("""Press **U/D/L/R/F/B** to rotate clockwise, and **shift+U/D/L/R/F/B** for counterclockwise.""")
+st.markdown("""[GitHub](https://github.com/nkramer/rubiks)""")
