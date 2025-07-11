@@ -104,7 +104,7 @@
     <div class="sidebar">
         <h1>🧊 Rubik's Cube Visualizer</h1>
         
-        <a href="{{ url_for('mix_cube', state=current_state, type=cube_type) }}" class="control-button">🔀 Mix Cube</a>
+        <a href="{{ cube_url('mix_cube') }}" class="control-button">🔀 Mix Cube</a>
         
         <div style="margin: 20px 0;">
             <label for="cubeType">Cube Type:</label>
@@ -114,25 +114,25 @@
             </select>
         </div>
         
-        <a href="{{ url_for('reset_cube', type=cube_type) }}" class="control-button">Reset Cube</a>
+        <a href="{{ cube_url('reset_cube') }}" class="control-button">Reset Cube</a>
         
         <h3>Moves</h3>
         <div class="move-columns">
             <div class="move-column">
-                <a href="{{ url_for('make_move', move='U', state=current_state, type=cube_type) }}" class="move-button">U</a>
-                <a href="{{ url_for('make_move', move='D', state=current_state, type=cube_type) }}" class="move-button">D</a>
-                <a href="{{ url_for('make_move', move='L', state=current_state, type=cube_type) }}" class="move-button">L</a>
-                <a href="{{ url_for('make_move', move='R', state=current_state, type=cube_type) }}" class="move-button">R</a>
-                <a href="{{ url_for('make_move', move='F', state=current_state, type=cube_type) }}" class="move-button">F</a>
-                <a href="{{ url_for('make_move', move='B', state=current_state, type=cube_type) }}" class="move-button">B</a>
+                <a href="{{ cube_url('make_move', move='U') }}" class="move-button">U</a>
+                <a href="{{ cube_url('make_move', move='D') }}" class="move-button">D</a>
+                <a href="{{ cube_url('make_move', move='L') }}" class="move-button">L</a>
+                <a href="{{ cube_url('make_move', move='R') }}" class="move-button">R</a>
+                <a href="{{ cube_url('make_move', move='F') }}" class="move-button">F</a>
+                <a href="{{ cube_url('make_move', move='B') }}" class="move-button">B</a>
             </div>
             <div class="move-column">
-                <a href="{{ url_for('make_move', move='U\'', state=current_state, type=cube_type) }}" class="move-button prime">U'</a>
-                <a href="{{ url_for('make_move', move='D\'', state=current_state, type=cube_type) }}" class="move-button prime">D'</a>
-                <a href="{{ url_for('make_move', move='L\'', state=current_state, type=cube_type) }}" class="move-button prime">L'</a>
-                <a href="{{ url_for('make_move', move='R\'', state=current_state, type=cube_type) }}" class="move-button prime">R'</a>
-                <a href="{{ url_for('make_move', move='F\'', state=current_state, type=cube_type) }}" class="move-button prime">F'</a>
-                <a href="{{ url_for('make_move', move='B\'', state=current_state, type=cube_type) }}" class="move-button prime">B'</a>
+                <a href="{{ cube_url('make_move', move="U'") }}" class="move-button prime">U'</a>
+                <a href="{{ cube_url('make_move', move="D'") }}" class="move-button prime">D'</a>
+                <a href="{{ cube_url('make_move', move="L'") }}" class="move-button prime">L'</a>
+                <a href="{{ cube_url('make_move', move="R'") }}" class="move-button prime">R'</a>
+                <a href="{{ cube_url('make_move', move="F'") }}" class="move-button prime">F'</a>
+                <a href="{{ cube_url('make_move', move="B'") }}" class="move-button prime">B'</a>
             </div>
         </div>
         
@@ -168,7 +168,8 @@
                     move += "'";
                 }
                 // Navigate to the move URL
-                window.location.href = "{{ url_for('make_move', move='PLACEHOLDER', state=current_state, type=cube_type) }}".replace('PLACEHOLDER', move);
+                var url = "{{ cube_url('make_move', move='PLACEHOLDER') }}".replace('PLACEHOLDER', move);
+                window.location.href = url;
             }
         });
         

@@ -45,6 +45,16 @@ def decode_cube_state(encoded_state):
     except:
         return None
 
+# Custom Jinja global for building cube URLs with current state/type
+def cube_url(endpoint, **values):
+    if 'state' not in values:
+        values['state'] = request.args.get('state')
+    if 'type' not in values:
+        values['type'] = request.args.get('type')
+    return url_for(endpoint, **values)
+
+app.jinja_env.globals['cube_url'] = cube_url
+
 @app.route('/')
 def index():
     # Get cube state from query parameter or use default
