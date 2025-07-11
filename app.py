@@ -20,94 +20,6 @@ def get_cell_color(value, is_colored):
     return color_map.get(value, '#FFFFFF')  # Default to white
 
 def cube_to_html(data, is_colored):
-    css = """<style>
-                .cube-grid {
-                    display: grid;
-                    grid-template-columns: repeat(15, auto);
-                    grid-template-rows: repeat(11, auto);
-                    font-family: monospace;
-                    font-size: 15px;
-                    width: fit-content;
-                    margin: 0 auto;
-                }
-                .cube-cell {
-                    width: 30px;
-                    height: 30px;
-                    border: 1px solid #000000;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-                .blank-cell {
-                    width: 15px;
-                    height: 15px;
-                }
-                .sidebar {
-                    width: 300px;
-                    float: left;
-                    padding: 20px;
-                    background-color: #f0f0f0;
-                    height: 100vh;
-                    overflow-y: auto;
-                }
-                .main-content {
-                    margin-left: 320px;
-                    padding: 20px;
-                }
-                .move-button {
-                    width: 100%;
-                    padding: 10px;
-                    margin: 5px 0;
-                    border: none;
-                    border-radius: 5px;
-                    background-color: #007bff;
-                    color: white;
-                    cursor: pointer;
-                }
-                .move-button:hover {
-                    background-color: #0056b3;
-                }
-                .move-button.prime {
-                    background-color: #dc3545;
-                }
-                .move-button.prime:hover {
-                    background-color: #c82333;
-                }
-                .control-button {
-                    width: 100%;
-                    padding: 10px;
-                    margin: 5px 0;
-                    border: none;
-                    border-radius: 5px;
-                    background-color: #28a745;
-                    color: white;
-                    cursor: pointer;
-                }
-                .control-button:hover {
-                    background-color: #218838;
-                }
-                .select-box {
-                    width: 100%;
-                    padding: 8px;
-                    margin: 5px 0;
-                    border: 1px solid #ccc;
-                    border-radius: 3px;
-                }
-                .move-columns {
-                    display: flex;
-                    gap: 10px;
-                }
-                .move-column {
-                    flex: 1;
-                }
-                .instructions {
-                    margin-top: 20px;
-                    padding: 15px;
-                    background-color: #e9ecef;
-                    border-radius: 5px;
-                }
-            </style>"""
-
     def cell_to_html(cell):
         if cell == ' ':
             return f'<div class="blank-cell"> </div>'
@@ -118,7 +30,7 @@ def cube_to_html(data, is_colored):
             return f'<div class="cube-cell" {style}>{cell}</div>'
 
     html_cells = [cell_to_html(cell) for row in data for cell in row]
-    return f'{css} <div class="cube-grid"> {"".join(html_cells)}</div>'
+    return f'<div class="cube-grid"> {"".join(html_cells)}</div>'
 
 @app.route('/')
 def index():
