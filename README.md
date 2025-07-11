@@ -1,5 +1,9 @@
 # Rubik's Cube Visualizer
 
+![Screenshot](screenshot.png)
+
+[Run Streamlit version](https://rubiks-42ffmuw4yqimrtjobazgas.streamlit.app/)
+
 ## Key files
 
 - cube.py -- core model (no ui) that's shared by multiple interfaces
@@ -20,7 +24,7 @@ pip install -r requirements.txt
 - Running flask
 ```
 flask --app flask-app.py --debug run
-<Navigate your browser to http://127.0.0.1:5000>
+<Navigate your browser to [http://127.0.0.1:5000](http://127.0.0.1:5000)>
 ```
 
 - Running streamlit
