@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rubik's Cube Visualizer</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <h1>🧊 Rubik's Cube Visualizer</h1>
+        
+        <button class="control-button" onclick="mixCube()">🔀 Mix Cube</button>
+        
+        <div style="margin: 20px 0;">
+            <label for="cubeType">Cube Type:</label>
+            <select id="cubeType" class="select-box" onchange="resetCube()">
+                <option value="Standard Cube" {% if cube_type == "Standard Cube" %}selected{% endif %}>Standard Cube</option>
+                <option value="Test Cube" {% if cube_type == "Test Cube" %}selected{% endif %}>Test Cube</option>
+            </select>
+        </div>
+        
+        <button class="control-button" onclick="resetCube()">Reset Cube</button>
+        
+        <h3>Moves</h3>
+        <div class="move-columns">
+            <div class="move-column">
+                <button class="move-button" onclick="makeMove('U')">U</button>
+                <button class="move-button" onclick="makeMove('D')">D</button>
+                <button class="move-button" onclick="makeMove('L')">L</button>
+                <button class="move-button" onclick="makeMove('R')">R</button>
+                <button class="move-button" onclick="makeMove('F')">F</button>
+                <button class="move-button" onclick="makeMove('B')">B</button>
+            </div>
+            <div class="move-column">
+                <button class="move-button prime" onclick="makeMove('U\'')">U'</button>
+                <button class="move-button prime" onclick="makeMove('D\'')">D'</button>
+                <button class="move-button prime" onclick="makeMove('L\'')">L'</button>
+                <button class="move-button prime" onclick="makeMove('R\'')">R'</button>
+                <button class="move-button prime" onclick="makeMove('F\'')">F'</button>
+                <button class="move-button prime" onclick="makeMove('B\'')">B'</button>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <p><strong>Keyboard Shortcuts:</strong></p>
+            <p>Press <strong>U/D/L/R/F/B</strong> to rotate clockwise</p>
+            <p>Press <strong>Shift+U/D/L/R/F/B</strong> for counterclockwise</p>
+        </div>
+        
+        <div style="margin-top: 20px;">
+            <a href="https://github.com/nkramer/rubiks" target="_blank">GitHub</a>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div id="cube-display">
+            {{ cube_html | safe }}
+        </div>
+    </div>
+
+    <script>
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(event) {
+            const key = event.key.toLowerCase();
+            const isShift = event.shiftKey;
+            
+            const moves = ['u', 'd', 'l', 'r', 'f', 'b'];
+            
+            if (moves.includes(key)) {
+                event.preventDefault();
+                let move = key.toUpperCase();
+                if (isShift) {
+                    move += "'";
+                }
+                makeMove(move);
+            }
+        });
+        
+        function makeMove(move) {
+            $.ajax({
+                url: '/move',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({move: move}),
+                success: function(response) {
+                    $('#cube-display').html(response.cube_html);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error making move:', error);
+                }
+            });
+        }
+        
+        function mixCube() {
+            $.ajax({
+                url: '/mix',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({}),
+                success: function(response) {
+                    $('#cube-display').html(response.cube_html);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error mixing cube:', error);
+                }
+            });
+        }
+        
+        function resetCube() {
+            const cubeType = $('#cubeType').val();
+            $.ajax({
+                url: '/reset',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({cube_type: cubeType}),
+                success: function(response) {
+                    $('#cube-display').html(response.cube_html);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error resetting cube:', error);
+                }
+            });
+        }
+    </script>
+</body>
+</html> 
