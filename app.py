@@ -30,7 +30,7 @@ def cube_to_html(data, is_colored):
             return f'<div class="cube-cell" {style}>{cell}</div>'
 
     html_cells = [cell_to_html(cell) for row in data for cell in row]
-    return f'<div class="cube-grid"> {"".join(html_cells)}</div>'
+    return "".join(html_cells)
 
 @app.route('/')
 def index():
