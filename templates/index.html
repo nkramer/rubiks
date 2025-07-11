@@ -119,20 +119,20 @@
         <h3>Moves</h3>
         <div class="move-columns">
             <div class="move-column">
-                <a href="{{ cube_url('make_move', move='U') }}" class="move-button">U</a>
-                <a href="{{ cube_url('make_move', move='D') }}" class="move-button">D</a>
-                <a href="{{ cube_url('make_move', move='L') }}" class="move-button">L</a>
-                <a href="{{ cube_url('make_move', move='R') }}" class="move-button">R</a>
-                <a href="{{ cube_url('make_move', move='F') }}" class="move-button">F</a>
-                <a href="{{ cube_url('make_move', move='B') }}" class="move-button">B</a>
+                <a href="{{ move_url('U') }}" class="move-button">U</a>
+                <a href="{{ move_url('D') }}" class="move-button">D</a>
+                <a href="{{ move_url('L') }}" class="move-button">L</a>
+                <a href="{{ move_url('R') }}" class="move-button">R</a>
+                <a href="{{ move_url('F') }}" class="move-button">F</a>
+                <a href="{{ move_url('B') }}" class="move-button">B</a>
             </div>
             <div class="move-column">
-                <a href="{{ cube_url('make_move', move="U'") }}" class="move-button prime">U'</a>
-                <a href="{{ cube_url('make_move', move="D'") }}" class="move-button prime">D'</a>
-                <a href="{{ cube_url('make_move', move="L'") }}" class="move-button prime">L'</a>
-                <a href="{{ cube_url('make_move', move="R'") }}" class="move-button prime">R'</a>
-                <a href="{{ cube_url('make_move', move="F'") }}" class="move-button prime">F'</a>
-                <a href="{{ cube_url('make_move', move="B'") }}" class="move-button prime">B'</a>
+                <a href="{{ move_url("U'") }}" class="move-button prime">U'</a>
+                <a href="{{ move_url("D'") }}" class="move-button prime">D'</a>
+                <a href="{{ move_url("L'") }}" class="move-button prime">L'</a>
+                <a href="{{ move_url("R'") }}" class="move-button prime">R'</a>
+                <a href="{{ move_url("F'") }}" class="move-button prime">F'</a>
+                <a href="{{ move_url("B'") }}" class="move-button prime">B'</a>
             </div>
         </div>
         
@@ -168,7 +168,7 @@
                     move += "'";
                 }
                 // Navigate to the move URL
-                var url = "{{ cube_url('make_move', move='PLACEHOLDER') }}".replace('PLACEHOLDER', move);
+                var url = "{{ move_url('PLACEHOLDER') }}".replace('PLACEHOLDER', move);
                 window.location.href = url;
             }
         });

@@ -45,14 +45,27 @@ def decode_cube_state(encoded_state):
     except:
         return None
 
-# Custom Jinja global for building cube URLs with current state/type
+# Custom Jinja globals for building cube URLs with current state/type
+def move_url(move, **values):
+    """Generate URL for a cube move"""
+    values['move'] = move
+    # Always include current state and type unless explicitly overridden
+    if 'state' not in values:
+        values['state'] = request.args.get('state')
+    if 'type' not in values:
+        values['type'] = request.args.get('type')
+    return url_for('make_move', **values)
+
 def cube_url(endpoint, **values):
+    """Generate URL for other cube endpoints (mix, reset, etc.)"""
+    # Always include current state and type unless explicitly overridden
     if 'state' not in values:
         values['state'] = request.args.get('state')
     if 'type' not in values:
         values['type'] = request.args.get('type')
     return url_for(endpoint, **values)
 
+app.jinja_env.globals['move_url'] = move_url
 app.jinja_env.globals['cube_url'] = cube_url
 
 @app.route('/')
@@ -106,15 +119,7 @@ def make_move(move):
 @app.route('/mix')
 def mix_cube():
     cube_type = request.args.get('type', 'Standard Cube')
-    cube_state = request.args.get('state')
-    
-    if cube_state:
-        cube = decode_cube_state(cube_state)
-        if cube is None:
-            cube = new_cube() if cube_type == "Standard Cube" else new_test_cube()
-    else:
-        cube = new_cube() if cube_type == "Standard Cube" else new_test_cube()
-    
+    cube = new_cube() if cube_type == "Standard Cube" else new_test_cube()
     cube = mix(cube)
     new_state = encode_cube_state(cube)
     return redirect(url_for('index', state=new_state, type=cube_type))
@@ -122,7 +127,6 @@ def mix_cube():
 @app.route('/reset')
 def reset_cube():
     cube_type = request.args.get('type', 'Standard Cube')
-    
     cube = new_cube() if cube_type == "Standard Cube" else new_test_cube()
     new_state = encode_cube_state(cube)
     return redirect(url_for('index', state=new_state, type=cube_type))
