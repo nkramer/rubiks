@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rubik's Cube Visualizer!</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         .cube-grid {
             display: grid;
@@ -42,12 +41,16 @@
         .move-button {
             width: 100%;
             padding: 10px;
+            box-sizing: border-box;
             margin: 5px 0;
             border: none;
             border-radius: 5px;
             background-color: #007bff;
             color: white;
             cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
         }
         .move-button:hover {
             background-color: #0056b3;
@@ -61,12 +64,16 @@
         .control-button {
             width: 100%;
             padding: 10px;
+            box-sizing: border-box;
             margin: 5px 0;
             border: none;
             border-radius: 5px;
             background-color: #28a745;
             color: white;
             cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
         }
         .control-button:hover {
             background-color: #218838;
@@ -97,35 +104,35 @@
     <div class="sidebar">
         <h1>🧊 Rubik's Cube Visualizer</h1>
         
-        <button class="control-button" onclick="mixCube()">🔀 Mix Cube</button>
+        <a href="{{ url_for('mix_cube', state=current_state, type=cube_type) }}" class="control-button">🔀 Mix Cube</a>
         
         <div style="margin: 20px 0;">
             <label for="cubeType">Cube Type:</label>
-            <select id="cubeType" class="select-box" onchange="resetCube()">
+            <select id="cubeType" class="select-box" onchange="changeCubeType()">
                 <option value="Standard Cube" {% if cube_type == "Standard Cube" %}selected{% endif %}>Standard Cube</option>
                 <option value="Test Cube" {% if cube_type == "Test Cube" %}selected{% endif %}>Test Cube</option>
             </select>
         </div>
         
-        <button class="control-button" onclick="resetCube()">Reset Cube</button>
+        <a href="{{ url_for('reset_cube', type=cube_type) }}" class="control-button">Reset Cube</a>
         
         <h3>Moves</h3>
         <div class="move-columns">
             <div class="move-column">
-                <button class="move-button" onclick="makeMove('U')">U</button>
-                <button class="move-button" onclick="makeMove('D')">D</button>
-                <button class="move-button" onclick="makeMove('L')">L</button>
-                <button class="move-button" onclick="makeMove('R')">R</button>
-                <button class="move-button" onclick="makeMove('F')">F</button>
-                <button class="move-button" onclick="makeMove('B')">B</button>
+                <a href="{{ url_for('make_move', move='U', state=current_state, type=cube_type) }}" class="move-button">U</a>
+                <a href="{{ url_for('make_move', move='D', state=current_state, type=cube_type) }}" class="move-button">D</a>
+                <a href="{{ url_for('make_move', move='L', state=current_state, type=cube_type) }}" class="move-button">L</a>
+                <a href="{{ url_for('make_move', move='R', state=current_state, type=cube_type) }}" class="move-button">R</a>
+                <a href="{{ url_for('make_move', move='F', state=current_state, type=cube_type) }}" class="move-button">F</a>
+                <a href="{{ url_for('make_move', move='B', state=current_state, type=cube_type) }}" class="move-button">B</a>
             </div>
             <div class="move-column">
-                <button class="move-button prime" onclick="makeMove('U\'')">U'</button>
-                <button class="move-button prime" onclick="makeMove('D\'')">D'</button>
-                <button class="move-button prime" onclick="makeMove('L\'')">L'</button>
-                <button class="move-button prime" onclick="makeMove('R\'')">R'</button>
-                <button class="move-button prime" onclick="makeMove('F\'')">F'</button>
-                <button class="move-button prime" onclick="makeMove('B\'')">B'</button>
+                <a href="{{ url_for('make_move', move='U\'', state=current_state, type=cube_type) }}" class="move-button prime">U'</a>
+                <a href="{{ url_for('make_move', move='D\'', state=current_state, type=cube_type) }}" class="move-button prime">D'</a>
+                <a href="{{ url_for('make_move', move='L\'', state=current_state, type=cube_type) }}" class="move-button prime">L'</a>
+                <a href="{{ url_for('make_move', move='R\'', state=current_state, type=cube_type) }}" class="move-button prime">R'</a>
+                <a href="{{ url_for('make_move', move='F\'', state=current_state, type=cube_type) }}" class="move-button prime">F'</a>
+                <a href="{{ url_for('make_move', move='B\'', state=current_state, type=cube_type) }}" class="move-button prime">B'</a>
             </div>
         </div>
         
@@ -160,54 +167,14 @@
                 if (isShift) {
                     move += "'";
                 }
-                makeMove(move);
+                // Navigate to the move URL
+                window.location.href = "{{ url_for('make_move', move='PLACEHOLDER', state=current_state, type=cube_type) }}".replace('PLACEHOLDER', move);
             }
         });
         
-        function makeMove(move) {
-            $.ajax({
-                url: '/move',
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({move: move}),
-                success: function(response) {
-                    $('#cube-display').html(response.cube_html);
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error making move:', error);
-                }
-            });
-        }
-        
-        function mixCube() {
-            $.ajax({
-                url: '/mix',
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({}),
-                success: function(response) {
-                    $('#cube-display').html(response.cube_html);
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error mixing cube:', error);
-                }
-            });
-        }
-        
-        function resetCube() {
-            const cubeType = $('#cubeType').val();
-            $.ajax({
-                url: '/reset',
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({cube_type: cubeType}),
-                success: function(response) {
-                    $('#cube-display').html(response.cube_html);
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error resetting cube:', error);
-                }
-            });
+        function changeCubeType() {
+            const cubeType = document.getElementById('cubeType').value;
+            window.location.href = "{{ url_for('reset_cube', type='PLACEHOLDER') }}".replace('PLACEHOLDER', cubeType);
         }
     </script>
 </body>
